@@ -9,7 +9,16 @@ import {
   TooltipComponent,
 } from 'echarts/components'
 import VChart from 'vue-echarts'
-import { ref } from 'vue'
+
+import { onMounted, ref, computed } from 'vue'
+import { readData } from './utils/Parser'
+
+const seriesData = ref<[Date, number][]>([])
+
+onMounted(async () => {
+  seriesData.value = await readData()
+  console.log(seriesData.value)
+})
 
 use([
   ScatterChart,
@@ -20,11 +29,12 @@ use([
   CanvasRenderer,
 ])
 
-const option = ref({
+const option = computed(() => ({
   title: {
     text: 'OMX Helsinki 25',
   },
   xAxis: {
+    type: 'time',
     splitLine: {
       lineStyle: {
         type: 'dashed',
@@ -42,15 +52,10 @@ const option = ref({
   series: [
     {
       type: 'scatter',
-      data: [
-        [1, 1],
-        [2, 2],
-        [3, 3],
-        [4, 4],
-      ],
+      data: seriesData.value,
     },
   ],
-})
+}))
 </script>
 
 <template>
