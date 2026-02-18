@@ -59,8 +59,18 @@ const option = computed(() => ({
 </script>
 
 <template>
-  <div class="chart-container">
-    <VChart class="chart" :option="option" />
+  <div class="row">
+    <div class="option-controls col hz-center">
+      <label for="start-date">Start date: </label>
+      <input id="start-date" name="start-date" type="date" />
+      <label for="expiration-date">Expiration date: </label>
+      <input id="expiration-date" name="expiration-date" type="date" />
+      <label for="strike-price">Strike price: </label>
+      <input id="strike-price" name="strike-price" type="number" />
+    </div>
+    <div class="chart-container">
+      <VChart class="chart" :option="option" />
+    </div>
   </div>
 </template>
 
@@ -76,5 +86,10 @@ const option = computed(() => ({
 .chart {
   width: 100%;
   height: 600px;
+}
+
+.option-controls {
+  width: 20em;
+  font-size: xx-large;
 }
 </style>

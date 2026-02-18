@@ -1,0 +1,18 @@
+input {
+  height: 2em;
+  font-size: x-large;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+}
+
+.hz-center {
+  justify-content: center;
+}
