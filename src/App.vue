@@ -7,6 +7,7 @@ import {
   TitleComponent,
   LegendComponent,
   TooltipComponent,
+  MarkLineComponent,
 } from 'echarts/components'
 import VChart from 'vue-echarts'
 
@@ -17,7 +18,6 @@ const seriesData = ref<[Date, number][]>([])
 
 onMounted(async () => {
   seriesData.value = await readData()
-  console.log(seriesData.value)
 })
 
 use([
@@ -27,7 +27,11 @@ use([
   LegendComponent,
   TooltipComponent,
   CanvasRenderer,
+  MarkLineComponent,
 ])
+
+const expirationDate = ref('2026-01-01')
+const strikePrice = ref(12400)
 
 const option = computed(() => ({
   title: {
@@ -53,6 +57,23 @@ const option = computed(() => ({
     {
       type: 'scatter',
       data: seriesData.value,
+      markLine: {
+        symbol: 'none',
+        label: { show: false },
+        lineStyle: {
+          color: '#042326',
+          type: 'solid',
+          width: 2,
+        },
+        data: [
+          {
+            xAxis: expirationDate.value
+              ? new Date(expirationDate.value).getTime()
+              : new Date('2026-01-01').getTime(),
+          },
+          { yAxis: strikePrice.value },
+        ],
+      },
     },
   ],
 }))
@@ -64,9 +85,9 @@ const option = computed(() => ({
       <label for="start-date">Start date: </label>
       <input id="start-date" name="start-date" type="date" />
       <label for="expiration-date">Expiration date: </label>
-      <input id="expiration-date" name="expiration-date" type="date" />
+      <input id="expiration-date" name="expiration-date" v-model="expirationDate" type="date" />
       <label for="strike-price">Strike price: </label>
-      <input id="strike-price" name="strike-price" type="number" />
+      <input id="strike-price" name="strike-price" v-model="strikePrice" type="number" />
     </div>
     <div class="chart-container">
       <VChart class="chart" :option="option" />
