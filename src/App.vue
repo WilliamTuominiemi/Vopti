@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { use } from 'echarts/core'
 import { CanvasRenderer } from 'echarts/renderers'
-import { ScatterChart } from 'echarts/charts'
+import { ScatterChart, LineChart } from 'echarts/charts'
 import {
   GridComponent,
   TitleComponent,
@@ -28,6 +28,7 @@ use([
   TooltipComponent,
   CanvasRenderer,
   MarkLineComponent,
+  LineChart,
 ])
 
 const expirationDate = ref('2026-01-01')
@@ -57,6 +58,7 @@ const option = computed(() => ({
     {
       type: 'scatter',
       data: seriesData.value,
+      symbolSize: 5,
       markLine: {
         symbol: 'none',
         label: { show: false },
@@ -73,6 +75,15 @@ const option = computed(() => ({
           },
           { yAxis: strikePrice.value },
         ],
+      },
+    },
+    {
+      type: 'line',
+      data: seriesData.value,
+      showSymbol: false, // hides the line's own dots
+      lineStyle: {
+        color: 'rgba(99, 110, 190, 0.5)',
+        width: 1,
       },
     },
   ],
