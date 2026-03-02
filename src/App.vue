@@ -45,6 +45,12 @@ function getGraphValueAtDate(dateStr: string) {
   return match ? match[1] : 0
 }
 
+function intrinsicValue() {
+  const spotPrice = getGraphValueAtDate(expirationDate.value)
+
+  return Math.max(0, spotPrice - strikePrice.value)
+}
+
 const option = computed(() => ({
   title: {
     text: 'OMX Helsinki 25',
@@ -132,6 +138,7 @@ const option = computed(() => ({
       <input id="expiration-date" name="expiration-date" v-model="expirationDate" type="date" />
       <label for="strike-price">Strike price: </label>
       <input id="strike-price" name="strike-price" v-model="strikePrice" type="number" />
+      {{ intrinsicValue() }}
     </div>
     <div class="chart-container">
       <VChart class="chart" :option="option" />
