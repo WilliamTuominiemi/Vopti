@@ -31,8 +31,19 @@ use([
   LineChart,
 ])
 
+const startDate = ref('2025-12-01')
 const expirationDate = ref('2026-01-01')
 const strikePrice = ref(12400)
+
+function getGraphValueAtDate(dateStr: string) {
+  if (!dateStr) return 0
+
+  const match = seriesData.value.find(([date]) => {
+    return date.toISOString().startsWith(dateStr)
+  })
+
+  return match ? match[1] : 0
+}
 
 const option = computed(() => ({
   title: {
@@ -63,7 +74,7 @@ const option = computed(() => ({
         symbol: 'none',
         label: { show: false },
         lineStyle: {
-          color: '#042326',
+          color: '#BE5B50',
           type: 'solid',
           width: 2,
         },
@@ -74,6 +85,28 @@ const option = computed(() => ({
               : new Date('2026-01-01').getTime(),
           },
           { yAxis: strikePrice.value },
+        ],
+      },
+    },
+    {
+      type: 'scatter',
+      data: seriesData.value,
+      symbolSize: 5,
+      markLine: {
+        symbol: 'none',
+        label: { show: false },
+        lineStyle: {
+          color: '#F0BB78',
+          type: 'dashed',
+          width: 2,
+        },
+        data: [
+          {
+            xAxis: startDate.value
+              ? new Date(startDate.value).getTime()
+              : new Date('2025-12-01').getTime(),
+          },
+          { yAxis: getGraphValueAtDate(startDate.value) },
         ],
       },
     },
@@ -94,7 +127,7 @@ const option = computed(() => ({
   <div class="row">
     <div class="option-controls col hz-center">
       <label for="start-date">Start date: </label>
-      <input id="start-date" name="start-date" type="date" />
+      <input id="start-date" name="start-date" v-model="startDate" type="date" />
       <label for="expiration-date">Expiration date: </label>
       <input id="expiration-date" name="expiration-date" v-model="expirationDate" type="date" />
       <label for="strike-price">Strike price: </label>
